@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Apply for {{ job.title }}</h2>
+<p><strong>Company:</strong> {{ job.company }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="applicant_name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" id="applicant_name" name="applicant_name" required>
+    </div>
+    <div class="mb-3">
+        <label for="applicant_email" class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="applicant_email" name="applicant_email" required>
+    </div>
+    <div class="mb-3">
+        <label for="cover_note" class="form-label">Cover Note</label>
+        <textarea class="form-control" id="cover_note" name="cover_note" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Application</button>
+    <a href="{% url 'job_detail' job.id %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
