@@ -1,15 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Apply for {{ job.title }} at {{ job.company }}</h1>
+<h2 class="mb-4">Apply for {{ job.title }}</h2>
 
-<form method="POST">
+<form id="applyJobForm">
     {% csrf_token %}
     <div class="mb-3">
         <label for="cover_note" class="form-label">Cover Note</label>
-        <textarea name="cover_note" class="form-control" id="cover_note" rows="5" required></textarea>
+        <textarea class="form-control" id="cover_note" name="cover_note" rows="5" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Submit Application</button>
-    <a href="{% url 'job_list' %}" class="btn btn-secondary">Cancel</a>
 </form>
+
+<div id="message" class="mt-3"></div>
+
+<script>
+document.getElementById('applyJobForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const data = {
+        job_id: {{ job.id }},
+        cover_note: document.getElementById('cover_note').value
+    };
+
+    fetch("{% url 'api_apply_job' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        document.getElementById('message').innerText = result.message;
+        document.getElementById('applyJobForm').reset();
+    })
+    .catch(error => {
+        document.getElementById('message').innerText = 'Error submitting application.';
+        console.error(error);
+    });
+});
+</script>
 {% endblock %}
