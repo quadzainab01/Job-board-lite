@@ -25,8 +25,9 @@ SECRET_KEY = 'django-insecure-^tqzuyybhezu(s#*uh6r@hq_9k039z=gwx9z5_x76jnq&)$g-q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['jobboardlite.com', 'www.jobboardlite.com', '127.0.0.1']
+import os
 
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "job-board-lite.onrender.com").split(",")
 
 # Application definition
 
