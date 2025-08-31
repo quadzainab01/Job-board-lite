@@ -27,15 +27,13 @@ DEBUG = False
 
 import os
 
-# Detect environment
-ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")  # default to development
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development")
 
 if ENVIRONMENT == "production":
-    # Use the domain name of your Render deployment
-    ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "job-board-lite.onrender.com").split(",")
+    ALLOWED_HOSTS = ["job-board-lite.onrender.com"]
 else:
-    # Local development
     ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
 
 # Application definition
 
