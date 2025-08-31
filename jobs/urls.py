@@ -8,9 +8,9 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', job_list, name='job_list'),
-    path('<int:job_id>/', job_detail, name='job_detail'),
-    path('post/', post_job, name='post_job'),
-    path('apply/<int:job_id>/', apply_job, name='apply_job'),
+    path('', job_list, name='job_list'),  # List all jobs
+    path('<int:job_id>/', job_detail, name='job_detail'),  # Job details
+    path('post/', post_job, name='post_job'),  # Post a new job
+    path('apply/<int:job_id>/', apply_job, name='apply_job'),  # Apply for a job
     path('notifications/read/', mark_notifications_read, name='mark-notifications-read'),
 ]

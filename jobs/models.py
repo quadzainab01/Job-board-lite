@@ -8,6 +8,7 @@ class JobPost(models.Model):
     description = models.TextField()
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    location = models.CharField(max_length=200, blank=True)  # <--- add this
 
     def __str__(self):
         return self.title
@@ -34,3 +35,4 @@ class JobNotification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.job.title}"
+

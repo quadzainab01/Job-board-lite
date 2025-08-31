@@ -3,6 +3,11 @@ from django.contrib.auth.decorators import login_required
 from .models import JobPost, Application, JobNotification
 from django.http import HttpResponse
 
+def home(request):
+    jobs = JobPost.objects.all().order_by('-created_at')[:5]  # latest 5 jobs
+    return render(request, 'jobs/home.html', {'jobs': jobs})
+
+
 # List all jobs
 def job_list(request):
     jobs = JobPost.objects.all()
@@ -11,14 +16,9 @@ def job_list(request):
 # Show details of a single job
 def job_detail(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
-    
-    # Only fetch applicants if the current user is the poster
-    applicants = job.application_set.all() if job.created_by == request.user else None
-    
-    return render(request, 'jobs/job_detail.html', {
-        'job': job,
-        'applicants': applicants
-    })
+    applicants = job.applications.all() if job.created_by == request.user else None
+    return render(request, 'jobs/job_detail.html', {'job': job, 'applicants': applicants})
+
 
 # Post a new job (requires login)
 @login_required
@@ -28,6 +28,7 @@ def post_job(request):
             title=request.POST['title'],
             description=request.POST['description'],
             company=request.POST['company'],
+            location=request.POST['location'],
             created_by=request.user
         )
         return redirect('job_list')
@@ -38,12 +39,7 @@ def post_job(request):
 def apply_job(request, job_id):
     job = get_object_or_404(JobPost, id=job_id)
     if request.method == 'POST':
-        Application.objects.create(
-            job=job,
-            applicant_name=request.POST['name'],
-            applicant_email=request.POST['email'],
-            cover_note=request.POST['cover_note']
-        )
+        Application.objects.create(job=job, applicant=request.user, cover_note=request.POST['cover_note'])
         return redirect('job_list')
     return render(request, 'jobs/apply_job.html', {'job': job})
 

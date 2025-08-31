@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User  # Use your custom User model if any
 from django.contrib import messages
+from django.http import HttpResponse
+
+def users_home(request):
+    return render(request, "users/home.html")
 
 def register(request):
     if request.method == 'POST':
